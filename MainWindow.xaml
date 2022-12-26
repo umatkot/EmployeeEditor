@@ -1,0 +1,46 @@
+﻿<Window x:Class="EmployeeEditor.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:EmployeeEditor"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800" Loaded="Window_Loaded">
+    <Window.Resources>
+        <local:EmployeeDbDataSet x:Key="employeeDbDataSet"/>
+        <CollectionViewSource x:Key="departmentsViewSource" Source="{Binding Departments, Source={StaticResource employeeDbDataSet}}"/>
+        <CollectionViewSource x:Key="departmentsEmployeersViewSource" Source="{Binding FK__Employeer__Depar__398D8EEE, Source={StaticResource departmentsViewSource}}"/>
+    </Window.Resources>
+    <Grid Margin="0,0,0,-6" DataContext="{StaticResource departmentsViewSource}">
+        <GroupBox x:Name="DepartmentsBox" HorizontalAlignment="Left" Height="142" Header="Подразделения" Margin="149,10,0,0" VerticalAlignment="Top" Width="641">
+            <DataGrid x:Name="departmentsDataGrid" AutoGenerateColumns="False" EnableRowVirtualization="True" Height="108" ItemsSource="{Binding}" RowDetailsVisibilityMode="VisibleWhenSelected" Margin="10,0,171,0">
+                <DataGrid.Columns>
+                    <DataGridTextColumn x:Name="iDColumn" Binding="{Binding ID}" Header="ID" Width="SizeToHeader" Visibility="Hidden"/>
+                    <DataGridTextColumn x:Name="nameColumn" Binding="{Binding Name}" Header="Наименовние" Width="*"/>
+                </DataGrid.Columns>
+            </DataGrid>
+        </GroupBox>
+        <GroupBox x:Name="groupBox" HorizontalAlignment="Left" Header="Сотрудники" Margin="149,186,0,10" Width="641" RenderTransformOrigin="0.385,0.559">
+            <DataGrid x:Name="employeersDataGrid" AutoGenerateColumns="False" EnableRowVirtualization="True" Height="220" ItemsSource="{Binding Source={StaticResource departmentsEmployeersViewSource}}" RowDetailsVisibilityMode="VisibleWhenSelected" Margin="10,0,0,0" RenderTransformOrigin="0.501,0.566" HorizontalAlignment="Left" Width="506">
+                <DataGrid.Columns>
+                    <DataGridTextColumn x:Name="iDColumn1" Binding="{Binding ID}" Header="ID" Width="SizeToHeader" Visibility="Hidden"/>
+                    <DataGridTextColumn x:Name="departmentColumn" Binding="{Binding Department}" Header="Department" Width="SizeToHeader"/>
+                    <DataGridTextColumn x:Name="firstNameColumn" Binding="{Binding FirstName}" Header="First Name" Width="SizeToHeader"/>
+                    <DataGridTextColumn x:Name="middleNameColumn" Binding="{Binding MiddleName}" Header="Middle Name" Width="SizeToHeader"/>
+                    <DataGridTextColumn x:Name="lastNameColumn" Binding="{Binding LastName}" Header="Last Name" Width="SizeToHeader"/>
+                    <DataGridTemplateColumn x:Name="dateBirthColumn" Header="Date Birth" Width="SizeToHeader">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <DatePicker SelectedDate="{Binding DateBirth, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTextColumn x:Name="positionColumn" Binding="{Binding Position}" Header="Position" Width="SizeToHeader"/>
+                    <DataGridTextColumn x:Name="phoneColumn" Binding="{Binding Phone}" Header="Phone" Width="SizeToHeader"/>
+                    <DataGridTextColumn x:Name="emailColumn" Binding="{Binding Email}" Header="Email" Width="SizeToHeader"/>
+                </DataGrid.Columns>
+            </DataGrid>
+        </GroupBox>
+        <Button x:Name="button" Content="Добавить новое" HorizontalAlignment="Left" Margin="634,58,0,0" VerticalAlignment="Top" Height="23" Width="105" Click="button_Click"/>
+    </Grid>
+</Window>
